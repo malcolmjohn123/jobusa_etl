@@ -1,0 +1,7 @@
+version: 2
+sources:
+  - name: src
+    database: usajobs
+    tables:
+      - name: job_postings
+      - name: user_area

@@ -1,0 +1,96 @@
+version: '3.7'
+
+x-airflow-common:
+  &airflow-common
+  image: app-airflow-dbt
+  environment:
+    &airflow-common-env
+    AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql://${AIRFLOWDB_USER}:${AIRFLOWDB_PWD}@airflowdb:5432/${AIRFLOWDB_DATABASE}
+  volumes:
+    - ./dags:/opt/airflow/dags:rw
+    - ./extraction:/opt/airflow/extraction:rw
+    - ./dbt:/opt/airflow/dbt:rw
+  env_file:
+  - ./.env
+  depends_on:
+    - airflowdb
+
+services:
+
+  airflowdb:
+    image: postgres:13
+    restart: always
+    environment:
+      - POSTGRES_USER=${AIRFLOWDB_USER}
+      - POSTGRES_PASSWORD=${AIRFLOWDB_PWD}
+      - POSTGRES_DB=${AIRFLOWDB_DATABASE}
+    volumes:
+      - ./postgres_data_airflow:/var/lib/postgresql/data:rw
+    expose:
+      - 5432
+
+  #airflow initialization
+  airflow-init:
+    <<: *airflow-common
+    entrypoint: /bin/bash -c "/bin/bash -c \"$${@}\""
+    command: |
+      /bin/bash -c "
+        airflow db init
+        airflow db upgrade
+        airflow users create -r Admin -u ${AIRFLOWUI_DEFAULT_USER} -e ${AIRFLOWUI_DEFAULT_EMAIL} -f ${AIRFLOWUI_FNAME} -l ${AIRFLOWUI_LNAME} -p ${AIRFLOWUI_DEFAULT_PASSWORD}
+      "
+    environment:
+      <<: *airflow-common-env
+
+  # airflow scheduler
+  airflow-scheduler:
+    <<: *airflow-common
+    command: scheduler
+    environment:
+      <<: *airflow-common-env
+    restart: always
+
+  # airflow UI
+  airflow-webserver:
+    <<: *airflow-common
+    command: webserver
+    ports:
+      - 8081:8080
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    restart: always
+    environment:
+      <<: *airflow-common-env
+
+  # PostgreSQL database service
+  db:
+    image: postgres:13
+    restart: always
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PWD}
+      - POSTGRES_DB=${POSTGRES_DATABASE}
+    volumes:
+       - ./postgres_data:/var/lib/postgresql/data:rw
+    ports:
+    - published: 5433
+      target: 5433
+
+  # PGAdmin service
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+
+# Names our volume
+volumes:
+  my-db:

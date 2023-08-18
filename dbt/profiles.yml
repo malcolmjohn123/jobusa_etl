@@ -1,0 +1,11 @@
+usajobs_postgres:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: "{{env_var('POSTGRES_HOST')}}"
+      user: "{{env_var('POSTGRES_USER')}}"
+      password: "{{env_var('POSTGRES_PWD')}}"
+      port: 5432
+      dbname: "{{env_var('POSTGRES_DATABASE')}}"
+      schema : "staging"

@@ -1,0 +1,9 @@
+__pycache__/
+target/
+dbt_modules/
+logs/
+env*/
+.idea/
+.vscode
+.env
+*/temp/
