@@ -5,12 +5,17 @@ This repository contains an end-to-end ETL (Extract, Transform, Load) pipeline f
 
 
 
-## Folder Strcuture
+## Folder Structure
 
 ```bash
   usajobs_etl/  
 ├── dags/    
 │   ├── etl_dag.py
+├── dbt/
+│   ├── data
+│   ├── models/
+│   ├── dbt_project.yml
+│   ├── profiles.yml
 ├── extraction/          
 │   ├──api_extract.py
 ├── utils/          
@@ -20,11 +25,6 @@ This repository contains an end-to-end ETL (Extract, Transform, Load) pipeline f
 │   ├── config_utils.py
 │   ├── dbt_utils.py
 │   ├── log_utils.py
-├── dbt/
-│   ├── data
-│   ├── models/
-│   ├── dbt_project.yml
-│   ├── profiles.yml
 ├── docker-compose.yml
 ├── Dockerfile          
 ├── setup.py
@@ -87,11 +87,21 @@ Start the services using Makefile
 ```bash
   make start
 ```
+Once the service is tarted  visit the url below to access airflow ui. You can use the username = **admin** and pwd = **airflow** set in .env.example file. access the airflowUI and start dag
 
+```bash
+  http://localhost:8081/
+```
+
+To access the pgadmin and to start dag visit the url. Login to pogadmin ui with useremail = **admin@admin.com** and pwd = **admin**. Addd server with credentials host = **db**, port = **5432**, username=**postgres**, pwd=**postgres**.These credentials are set in .env.example file.
+
+```bash
+  http://localhost:8080/
+```
 
 ## Description about running the application
 
-So all the servies requried are contianerized. For this application we will have 5 services running
+So all the servies requried are containerized. For this application we will have 5 services running
 
 - airflow database
 - airflow scheduler
@@ -118,7 +128,7 @@ To start all the services type **make start** and hit enter. If some how service
 
 ## Cloud Service Implementation and Improvements
 
-If this project was to be implemented in cloud then I would use snowflake and AWS cloud services. 
+If this project was to be implemented in cloud then snowflake and aws cloud would be definitely one of the suitable stack. 
 
 ### Snowflake
 
