@@ -35,9 +35,9 @@ up-scheduler:
 up-webserver:
 	sudo docker-compose up -d airflow-webserver
 
+# Start all services sequentially
+start: build up-airflowdb up-db up-pgadmin airflow-init  up-scheduler up-webserver
+
 # Stop and remove the Docker services
 stop:
 	sudo docker-compose down -v
-
-# Start all services sequentially
-start: stop build up-airflowdb up-db up-pgadmin airflow-init  up-scheduler up-webserver
