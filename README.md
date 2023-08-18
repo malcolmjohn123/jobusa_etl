@@ -75,6 +75,13 @@ Go to the project directory
   cd jobusa_etl
 ```
 
+Change the .env.example file to .env file and set the environemnt variables. For ease I have already the set the necessary variables. You just need to set the veraibles below
+
+```bash
+  API_USER_AGENT = 
+  API_AUTHORIZATION_KEY= 
+```
+
 Start the services using Makefile
 
 ```bash
