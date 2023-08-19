@@ -113,13 +113,13 @@ So all these services are run in containers through docker-compose. To be able t
 
 ```bash
   Available commands:
-  make build        - Build the Docker image for airflow with custom packages
-  make up-airflowdb - Start airflow-db service in the background
-  make up-db        - Start warehouse db service in the background
-  make up-pgadmin   - Start pgadmin service in the background
+  make build        - Build the airflow Docker image with custom packages
+  make airflowdb    - Start airflow-db service in the background
+  make warehousedb  - Start warehouse db service in the background
+  make pgadmin      - Start pgadmin service in the background
   make airflow-init - Start airflow-init service to setup airflow image and create users
-  make up-scheduler - Start airflow-scheduler service in the background
-  make up-webserver - Start airflow-webserver service in the background
+  make scheduler    - Start airflow-scheduler service in the background
+  make webserver    - Start airflow-webserver service in the background
   make start        - Build the image and start all services sequentially
   make stop         - Stop and remove the Docker services
 ```
@@ -176,7 +176,7 @@ Snowflake's unique architecture allows storage and compute to be decoupled, redu
 - Vendor Lock-In: Once an organization heavily invests in AWS services, transitioning to another cloud provider can be complex and costly
 
 ### Improvements
-One thing we can add into above projects is to setup data dashboaord using BI tools like Looker, Metabase etc. to visualize the produced insights. And for more business value we can extract data related to jobs from other sources also.
+One thing we can add into above project is to setup data dashboaord using BI tools like Looker, Metabase etc. to visualize the produced insights. And for more business value we can extract data related to jobs from other sources also.
 
 
 
